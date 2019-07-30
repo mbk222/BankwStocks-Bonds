@@ -1,0 +1,18 @@
+TO-DO LIST (no particular order):
+
+1. Create NASDAQ Class
+2. Create NASDAQ Frame & ActionListener
+	A. Create NASDAQ Portfolio frame (either in NASDAQ or Customer class)
+3. Create Bond Class
+	A. Each bond object has to take in date as a parameter
+4. Create Bond Frame & ActionListener
+	A. Create Bond Portfolio frame (either in Bond or Customer class)
+5. Customer:
+	A. Add a list attribute to hold all the bond objects
+	B. Add a list attribute to hold all the stock objects
+
+6. Bank Manager:
+	A. Can call the stock and bond portfolio frames to view for a certain customer
+
+7. Aesthetics
+	A. Make big and pretty !
