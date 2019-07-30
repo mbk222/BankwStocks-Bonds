@@ -1,18 +1,41 @@
 TO-DO LIST (no particular order):
 
 1. Create NASDAQ Class
+
 2. Create NASDAQ Frame & ActionListener
 	A. Create NASDAQ Portfolio frame (either in NASDAQ or Customer class)
+
 3. Create Bond Class
 	A. Each bond object has to take in date as a parameter
+
 4. Create Bond Frame & ActionListener
 	A. Create Bond Portfolio frame (either in Bond or Customer class)
+
 5. Customer:
 	A. Add a list attribute to hold all the bond objects
 	B. Add a list attribute to hold all the stock objects
+	C. Can have multiple checking and savings accounts
 
-6. Bank Manager:
+6. Customer Frame:
+	A. Add securities account button to click if the account has more than $5,000 & if you already have a securities account, then the button goes away
+	B. Add a list of trade histories (the securities version of transactions)
+	C. Add a trade history frame (like transaction history but calls the Bond and the Stock toString() 
+
+7. Bank Manager:
 	A. Can call the stock and bond portfolio frames to view for a certain customer
 
-7. Aesthetics
+8. Create an abstract trade class (or an actual trade class that can buy and sell):
+	A. Add a Buy class
+	B. Add a Sell class
+
+9. Bank:
+	A. Cannot be a 1 day bank, so unless you press Shutdown on the main bank frame, it will keep it open (or unless you hit close on the program) - if you close the program, it can't keep all of these values, can it?
+
+10. Misc.:
+	A. Change withdraw and deposit frames to accept a string as a currency instead of buttons
+	B. Change currency to accept lower and uppercase values as valid (case insensitive)
+	C. Update view account summary to show options for viewing portfolios if they have  a securities account (error throw if they don't have any bonds or any stocks, or conditional the buttons for bonds or stocks in the securities account e.g. Customer.this.securities.getBonds().length == 0)
+
+11. Aesthetics
 	A. Make big and pretty !
+	B. Make the Bank login and create new account prettier
