@@ -34,16 +34,15 @@ TO-DO LIST (no particular order):
 
 10. Create the DB
 
-11.
 
-12. Misc.:
+11. Misc.:
 	A. Change withdraw and deposit frames to accept a string as a currency instead of buttons
 	B. Change currency to accept lower and uppercase values as valid (case insensitive)
 	C. Update view account summary to show options for viewing portfolios if they have  a securities account (error throw if they don't have any bonds or any stocks, or conditional the buttons for bonds or stocks in the securities account e.g. Customer.this.securities.getBonds().length == 0)
 
-13. Aesthetics
+12. Aesthetics
 	A. Make big and pretty !
 	B. Make the Bank login and create new account prettier
 
-14. B O N U S
+13. B O N U S
 	A. Add options for a customer to add collateral that is not already in the linkedList (maybe they got another house idk there's crazier things in this world)
