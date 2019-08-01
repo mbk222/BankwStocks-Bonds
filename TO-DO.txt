@@ -14,12 +14,14 @@ TO-DO LIST (no particular order):
 5. Account
 	A. Add a Securities account
 		i. Bond objects (?), Stock objects(?) 
+	B. Each account has unique ID (4 digit) per customer
+		i. Change .id to .name and make .id this 4 digit (make a random number that is already not in the rest of them)
 
 6. Customer:
-	A. Can have multiple checking and savings accounts
 
 7. Customer Frame:
 	A. Add securities account button to click if the account has more than $5,000 & if you already have a securities account, then the button goes away
+		i. Consider refresh for this option 
 	B. Add a list of trade histories (the securities version of transactions)
 	C. Add a trade history frame (like transaction history but calls the Bond and the Stock toString() 
 
@@ -48,3 +50,4 @@ TO-DO LIST (no particular order):
 
 14. B O N U S
 	A. Add options for a customer to add collateral that is not already in the linkedList (maybe they got another house idk there's crazier things in this world)
+	B. More than one checking and savings account
