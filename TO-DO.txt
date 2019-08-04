@@ -1,53 +1,13 @@
-TO-DO LIST (no particular order):
+1. Add manager code
+2. Add fees for loan, withdraw, create, close
+3. ReadMe
+4. Documentation
 
-1. Create NASDAQ Class
+JIAN:
 
-2. Create NASDAQ Frame & ActionListener
-	A. Create NASDAQ Portfolio frame (either in NASDAQ or Customer class)
+KURT:
 
-3. Create Bond Class
-	A. Each bond object has to take in date as a parameter
+AMANDA:
 
-4. Create Bond Frame & ActionListener
-	A. Create Bond Portfolio frame (either in Bond or Customer class)
+ADAM:
 
-5. Account
-	A. Add a Securities account
-		i. Bond objects (?), Stock objects(?) 
-	B. Each account has unique ID (4 digit) per customer
-		i. Change .id to .name and make .id this 4 digit (make a random number that is already not in the rest of them)
-
-6. Customer:
-
-7. Customer Frame:
-	A. Add securities account button to click if the account has more than $5,000 & if you already have a securities account, then the button goes away
-		i. Consider refresh for this option 
-	B. Add a list of trade histories (the securities version of transactions)
-	C. Add a trade history frame (like transaction history but calls the Bond and the Stock toString() 
-
-8. Bank Manager:
-	A. Can call the stock and bond portfolio frames to view for a certain customer
-
-9. Create an abstract trade class (or an actual trade class that can buy and sell):
-	A. Add a Buy class
-	B. Add a Sell class
-
-10. Bank:
-	A. Cannot be a 1 day bank, so unless you press Shutdown on the main bank frame, it will keep it open (or unless you hit close on the program) - if you close the program, it can't keep all of these values, can it?
-
-
-11. Create the DB
-
-
-12. Misc.:
-	A. Change withdraw and deposit frames to accept a string as a currency instead of buttons
-	B. Change currency to accept lower and uppercase values as valid (case insensitive)
-	C. Update view account summary to show options for viewing portfolios if they have  a securities account (error throw if they don't have any bonds or any stocks, or conditional the buttons for bonds or stocks in the securities account e.g. Customer.this.securities.getBonds().length == 0)
-
-13. Aesthetics
-	A. Make big and pretty !
-	B. Make the Bank login and create new account prettier
-
-14. B O N U S
-	A. Add options for a customer to add collateral that is not already in the linkedList (maybe they got another house idk there's crazier things in this world)
-	B. More than one checking and savings account
