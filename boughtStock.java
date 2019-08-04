@@ -6,12 +6,15 @@ public class boughtStock {
     private int numshare;
     private Timestamp date;
     private int sb;
-    public boughtStock(int customerid, String ticker, int numshare, Timestamp date, int sb){
+    private double price;
+
+    public boughtStock(int customerid, String ticker, int numshare, Timestamp date, int sb, double price){
         this.customerid = customerid;
         this.ticker = ticker;
         this.numshare = numshare;
         this.date = date;
         this.sb = sb;
+        this.price = price;
     }
 
     public int getCustomerid() {
@@ -52,5 +55,13 @@ public class boughtStock {
 
     public void setSb(int sb) {
         this.sb = sb;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }
