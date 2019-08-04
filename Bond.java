@@ -1,7 +1,9 @@
+
 //import java.text.DateFormat;
 //import java.text.SimpleDateFormat;
 //import java.time.LocalDateTime;
 //import java.util.Date;
+import java.util.Random;
 import java.time.LocalDate;
 
 public class Bond {
@@ -10,11 +12,16 @@ public class Bond {
 	private int length; // in weeks
 	private boolean bought; // true once purchased 
 	private LocalDate sellby;
+
+
+	private Random random = new Random();
+	private String bondID = String.format("%04d", random.nextInt(10000)); // 4 digit ID;
 	
 	public Bond() {
-		name = "War Bond";
+		name = "Govenment";
 		price = 25.0;
 		length = 16;
+		interest = 0.05;
 		bought = false;
 		
 	}
@@ -55,8 +62,12 @@ public class Bond {
 			return -1;
 	}
 	
+	public String displayBond() { // USE WHEN DISPLAYING IN PORTFOLIO 
+		return name + " | $" + price + " | at "+ interest + " interest | " + length + " weeks |"; 
+	}
+	
 	public String toString() {
-		return name + " | $" + price + " | at "+ interest + " interest | " + length + " weeks | bought: " + bought; 
+		return name + " | $" + price + " | at "+ interest + " interest | " + length + " weeks |"; 
 	}
 	
 	public static void main(String[] args) {
