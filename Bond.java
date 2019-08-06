@@ -1,4 +1,5 @@
 
+
 //import java.text.DateFormat;
 //import java.text.SimpleDateFormat;
 //import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class Bond {
 	private String bondID = String.format("%04d", random.nextInt(10000)); // 4 digit ID;
 	
 	public Bond() {
-		name = "Govenment";
+		name = "USA";
 		price = 25.0;
 		length = 16;
 		interest = 0.05;
@@ -32,6 +33,11 @@ public class Bond {
 		this.interest = interest;
 		this.length = length;
 		bought = false;
+	}
+	
+	
+	public String getName() {
+		return name;
 	}
 	
 	
@@ -62,8 +68,15 @@ public class Bond {
 			return -1;
 	}
 	
-	public String displayBond() { // USE WHEN DISPLAYING IN PORTFOLIO 
-		return name + " | $" + price + " | at "+ interest + " interest | " + length + " weeks |"; 
+	 public boolean equals(Bond bond) {
+	        if (this.name == bond.getName()) {
+	            return true;
+	        }
+	        return false;
+	    }
+	
+	public String displayBond() { // USE WHEN DISPLAYING YOUR BONDS
+		return name + " | $" + price + " | at "+ interest + " interest | Maturity: " + sellby + " |"; 
 	}
 	
 	public String toString() {
@@ -95,12 +108,14 @@ public class Bond {
 		System.out.println("First sellby " + b.sellby);
 		System.out.println("LocalDate " + LocalDate.now());
 	
-		System.out.println(Bond.sellBond(b));
+	//	System.out.println(Bond.sellBond(b));
 		
 		
 		b.sellby = LocalDate.of(2010, 1, 1);
 		
-		System.out.println(b.sellby);
+		System.out.println("Sell by " + b.sellby);
+		System.out.println(b);
+		System.out.println(b.displayBond());
 		System.out.println(Bond.sellBond(b));
 		
 		
