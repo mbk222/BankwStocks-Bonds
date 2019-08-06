@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
+
 
 
 public class BondMarket {
@@ -51,8 +53,36 @@ public class BondMarket {
 			market.remove(i);
 		}
 	}
+
+	public static void buyBond(Bond bond, double amount, Securities account, Date tdate) {
+		if (account.getBalance()>=amount) {
+			account.getBondList().add( new Bond(bond, amount) );
+			account.makeTransaction("payment", amount, "BUY BOND", tdate);
+		}
+		else {
+			// COULDN'T BUY BOND
+		}
+    }
+
+    public static void sellBond(Securites account, String bondID Date tdate) {
+    	for (int i=0; i < account.getBondList().size(); i++) {
+    		Bond accountBond = account.getBondList().get(i);
+    		if (accountBond.getBondId() == bondID) {
+    			if (LocalDate.now().compareTo(accountBond.getSellBy()) >= 0) {
+    				System.out.println("Interest recieved");
+					account.makeTransaction("receipt", ((accountBond.getAmount() + accountBond.getAmount()) * accountBond.getInterest), "SELL BOND", tdate);
+					account.getBondList().remove(i);
+				}
+				else {
+					System.out.println("No interest");
+					account.makeTransaction("receipt", accountBond.getAmount(), "SELL BOND", tdate);
+					account.getBondList().remove(i);
+				}
+    		}
+    	}
+    }
 	
-	 private static int getIndex(ArrayList<Bond> bondList, Bond bond) {
+	private static int getIndex(ArrayList<Bond> bondList, Bond bond) {
 			for (int i=0; i < bondList.size();i++) {
 				if (bond.equals(bondList.get(i))) {
 					return i;
