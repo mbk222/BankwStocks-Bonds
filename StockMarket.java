@@ -52,6 +52,14 @@ public class StockMarket {
 		}
 	}
 
+	public static Stock getStock(String ticker) {
+		for (int i = 0; i <stocks.length; i++) {
+			if (stocks[i].getTicker().equals(ticker))
+				return stocks[i];
+		}
+		return null;
+	}
+	
 	/** If the buyer's account contains enough money to buy the desired number of stock shares, it will take out
 	 *  the money from the account and put a copy of the stock with the number of shares into the account.
 	 * @param stock The stock to be bought
