@@ -8,7 +8,7 @@ public class Stock {
  private Date dateBought;
  private double boughtp;
  private HashMap<Date, String> priceHistory = new HashMap<Date, String>();
- // PRICE BOUGHT AT 
+ //PRICE BOUGHT AT 
  
  private Random random = new Random();
  
