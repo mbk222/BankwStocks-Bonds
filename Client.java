@@ -60,6 +60,10 @@ public class Client extends Person{
 		return haveLoan;
 	}
 	
+	public void giveLoan() {
+		haveLoan = true;
+	}
+	
 	public double loanSize() {
 		for (int i = 0; i < accounts.size(); i++) {
 			if (accounts.get(i).type().equals("loan")) {
@@ -136,18 +140,18 @@ public class Client extends Person{
 	
 	// need to figure out the loan
 	public boolean requestLoan(Loan loan) {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Do you have a collateral to cover your loan of this size: " + loan.getBalance() + "? (Y/N)");
-		String answer = scan.nextLine();
-		
-		if (answer.equals("Y")) 
-			collateral = true;
-		else {
-			collateral = false;
-			return false;
-		}
-		haveLoan = true;
-		this.openAccount(loan);
+//		Scanner scan = new Scanner(System.in);
+//		System.out.println("Do you have a collateral to cover your loan of this size: " + loan.getBalance() + "? (Y/N)");
+//		String answer = scan.nextLine();
+//		
+//		if (answer.equals("Y")) 
+//			collateral = true;
+//		else {
+//			collateral = false;
+//			return false;
+//		}
+//		haveLoan = true;
+//		this.openAccount(loan);
 		return true;
 		
 	}

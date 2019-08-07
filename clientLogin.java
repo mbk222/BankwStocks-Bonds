@@ -17,6 +17,7 @@ public class clientLogin extends JPanel {
 	private static JLabel please;
 	
 	public static JFrame testframe = new JFrame();
+	private static JButton backButton;
 	
 	public clientLogin() {
 		testframe.setBounds(100, 100, 480, 330);
@@ -54,13 +55,37 @@ public class clientLogin extends JPanel {
 			public void actionPerformed(ActionEvent e ) {
 				String user = loginField.getText();
 				String pass1 = passwordField.getText();
-				Client client = Database.findClient(user, pass1);
-				System.out.println(Database.checkUserPass(user,pass1));
-				JPanel panelNew = clientDisplay.init(frame, client);
-
-				frame.setContentPane(panelNew);
-				frame.revalidate();
-				frame.repaint();
+				
+				// INVALID LOGIN ERROR
+				if (Database.findClient(user, pass1) == null) {
+					JFrame error = new JFrame();
+					JPanel errorPanel = new JPanel();
+					
+					JLabel label = new JLabel("Invalid Username and Password");
+					
+					errorPanel.add(label);
+					error.add(errorPanel);
+					
+					error.setTitle("ERROR");
+					error.setSize( 250, 75 );
+					error.setLocation( 250, 200 );
+				//	error.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+					error.setVisible( true );
+					
+//					JPanel panelNew = clientDisplay.init(frame, client);
+//					frame.setContentPane(panelNew);
+//					frame.revalidate();
+//					frame.repaint();
+				}
+				else {
+					Client client = Database.findClient(user, pass1);
+					System.out.println(Database.checkUserPass(user,pass1));
+					JPanel panelNew = clientDisplay.init(frame, client);
+	
+					frame.setContentPane(panelNew);
+					frame.revalidate();
+					frame.repaint();
+				}
 				
 			}
 		}
@@ -76,6 +101,24 @@ public class clientLogin extends JPanel {
 		please.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 		please.setBounds(82, 49, 289, 33);
 		panel.add(please);
+		
+		backButton = new JButton("BACK");
+		backButton.setBounds(157, 219, 117, 29);
+		
+		class backListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Back");
+				JPanel panelNew = ClientFirstChoices.init(frame);
+
+				frame.setContentPane(panelNew);
+				frame.revalidate();
+				frame.repaint();
+			}
+		}
+		backListener backL = new backListener();
+		backButton.addActionListener(backL);
+
+		panel.add(backButton);
 		
 		return panel;
 	}

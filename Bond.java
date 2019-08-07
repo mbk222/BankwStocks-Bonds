@@ -10,20 +10,20 @@ public class Bond {
 
 
 	private Random random = new Random();
-	private String bondID = String.format("%05d", random.nextInt(10000)); // 5 digit ID;
+	private String bondID = String.format("%04d", random.nextInt(10000)); // 5 digit ID;
 	
 	public Bond() {
 		name = "USA";
-		amount = 0;
+	//	amount = 0;
 		length = 16;
 		interest = 0.05;
 		bought = false;
 		
 	}
 	
-	public Bond(String name, double amount, double interest, int length) {
+	public Bond(String name, double interest, int length) {
 		this.name = name;
-		this.amount = amount;
+	//	this.amount = amount;
 		this.interest = interest;
 		this.length = length;
 		bought = false;
@@ -60,7 +60,7 @@ public class Bond {
 	}
 
 	public LocalDate getSellBy() {
-		return sellby
+		return sellby;
 	}
 	
 	
@@ -99,11 +99,11 @@ public class Bond {
 	    }
 	
 	public String displayBond() { // USE WHEN DISPLAYING YOUR BONDS
-		return name + " | $" + amount + " | at "+ interest + " interest | Maturity: " + sellby + " |"; 
+		return name + " | ID: " + bondID + " | $"  + amount + " | " + "at "+ interest +  " interest | Maturity: " + sellby; 
 	}
 	
 	public String toString() {
-		return name + " | $" + amount + " | at "+ interest + " interest | " + length + " weeks |"; 
+		return name + " | " + "at "+ interest + " interest | " + length + " weeks"; 
 	}
 	
 	public static void main(String[] args) {
@@ -118,28 +118,28 @@ public class Bond {
 //		System.out.println(date.getYear());
 		
 		
-		System.out.println(LocalDate.now());
+//		System.out.println(LocalDate.now());
 //		
 //		LocalDate date3 = LocalDate.now();
 //		System.out.println(date3.getDayOfMonth());
 //		System.out.println(date3.getMonth());
 //		System.out.println(date3.getYear());
 		
-		Bond b = new Bond("Government", 300, 0.1, 4);
-		Bond.buyBond(b);
-		
-		System.out.println("First sellby " + b.sellby);
-		System.out.println("LocalDate " + LocalDate.now());
-	
-	//	System.out.println(Bond.sellBond(b));
-		
-		
-		b.sellby = LocalDate.of(2010, 1, 1);
-		
-		System.out.println("Sell by " + b.sellby);
-		System.out.println(b);
-		System.out.println(b.displayBond());
-		System.out.println(Bond.sellBond(b));
+//		Bond b = new Bond("Government", 300, 0.1, 4);
+//		Bond.buyBond(b);
+//		
+//		System.out.println("First sellby " + b.sellby);
+//		System.out.println("LocalDate " + LocalDate.now());
+//	
+//	//	System.out.println(Bond.sellBond(b));
+//		
+//		
+//		b.sellby = LocalDate.of(2010, 1, 1);
+//		
+//		System.out.println("Sell by " + b.sellby);
+//		System.out.println(b);
+//		System.out.println(b.displayBond());
+//		System.out.println(Bond.sellBond(b));
 		
 		
 	}

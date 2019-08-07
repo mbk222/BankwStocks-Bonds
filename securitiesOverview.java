@@ -116,35 +116,6 @@ public class securitiesOverview extends JPanel {
 		withdrawB.setBounds(334, 37, 110, 29);
 		panel.add(withdrawB);
 		
-		JComboBox curr = new JComboBox();
-		curr.setModel(new DefaultComboBoxModel(new String[] {"USD", "RUB", "CNY", "GBP"}));
-		curr.setBounds(254, 231, 79, 27);
-		panel.add(curr);
-		
-		JButton changeAcc = new JButton("Change Account Currency");
-		changeAcc.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("Changing account currency");
-				String currency = curr.getSelectedItem().toString();
-				Currency c = null;
-				
-				for (int i = 0; i < currencies.length; i++) {
-					if (currency.equals(currencies[i].getAcronym())) {
-						c = currencies[i];
-					}
-				}
-				account.changeAccountCurrency(c);
-				
-				JPanel panelNew = securitiesOverview.init(frame, client, account);
-				frame.setContentPane(panelNew);
-				frame.revalidate();
-				frame.repaint();
-			}
-		});
-		
-		changeAcc.setBounds(6, 230, 239, 29);
-		panel.add(changeAcc);
-		
 		accID = new JTextField();
 		accID.setText("Account ID");
 		accID.setColumns(10);
@@ -164,7 +135,34 @@ public class securitiesOverview extends JPanel {
 				String ID = accID.getText();
 				double amount = Double.parseDouble(tranAmount.getText());
 				Account send = client.getAccount(ID);
-				account.transfer(send, amount, Date.getCurrentDate());
+				
+				// ACCOUNT NOT FOUND, LOW BALANCE, AND CURRENCY MISMATCH ERRORS 
+				if ((send == null) || (account.getBalance() < amount) || (!account.getCurrency().getAcronym().equals((send.getCurrency().getAcronym())))) {
+					JFrame error = new JFrame();
+					JPanel errorPanel = new JPanel();
+					JLabel errorLabel;
+					if ((account.getBalance() < amount)) {
+						System.out.println("Transfer failed, low balance.");
+						errorLabel = new JLabel("Transfer failed, low balace");
+					}
+					else if (send == null) {
+						errorLabel = new JLabel("Account not found");
+					}
+					else {
+						errorLabel = new JLabel("Accounts based in different currencies");
+					}
+					errorPanel.add(errorLabel);
+					error.getContentPane().add(errorPanel);
+					
+					error.setTitle("ERROR");
+					error.setSize( 250, 75 );
+					error.setLocation( 250, 200 );
+					error.setVisible( true );				
+				}
+				else {
+					System.out.println("AccountOverview Transfer else,transfer being called");
+					account.transfer(send, amount, Date.getCurrentDate());
+				}
 				
 				JPanel panelNew = securitiesOverview.init(frame, client, account);
 				frame.setContentPane(panelNew);
@@ -224,6 +222,16 @@ public class securitiesOverview extends JPanel {
 		panel.add(stockMarketButton);
 		
 		JButton bondMarketButton = new JButton("Bonds Overview");
+		bondMarketButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Bond overview");
+				
+				JPanel panelNew = BondMarketOverview.init(frame, client, account);
+				frame.setContentPane(panelNew);
+				frame.revalidate();
+				frame.repaint();
+			}
+		});
 		bondMarketButton.setBounds(244, 153, 200, 32);
 		panel.add(bondMarketButton);
 

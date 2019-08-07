@@ -27,86 +27,86 @@ public class Savings extends Account {
 	}
 	
 	
-	public boolean makeTransaction(String action, double amount, String reference, Date tdate) {
-		// new transaction(date, action, amount, account, reference)
-		
-		if (action.equals("payment")) { // sending money to a business
-			String type = "OUT";
-			Transaction t = null;
-			if (takeOut(amount) != -1)
-				// make transaction
-				t = new Transaction(tdate, this, amount, reference, type);
-				transactions[tindex] = t;
-				tindex++;
-				return true;
-		}
-		else if (action.equals("receipt")) { // receiving money to account 
-			String type = "IN";
-			Transaction t;
-			deposit(amount, getCurrency());
-			// make transaction
-			t = new Transaction(tdate, this, amount, reference, type);
-			transactions[tindex] = t;
-			tindex++;
-			
-			if (over10 != null) {
-				if (this.getBalance() >= 10000) {
-					over10 = Date.getCurrentDate();
-					newDate = new Date(over10.getMonth(),over10.getDay(),over10.getYear()+1);
-				}
-			}
-			return true;
-		}
-		
-		else if (action.equals("deposit")) { // depositing money to own account
-			String type = "IN";
-			Transaction t;
-			reference = "Deposit";
-			deposit(amount, getCurrency());
-			// make transaction 
-			t = new Transaction(tdate, this, amount, reference, type);
-			transactions[tindex] = t;
-			tindex++;
-			
-			if (over10 != null) {
-				if (this.getBalance() >= 10000) {
-					over10 = Date.getCurrentDate();
-					newDate = new Date(over10.getMonth(),over10.getDay(),over10.getYear()+1);
-				}
-			}
-			return true;
-		}
-		
-		System.out.println("Invalid Transaction");
-		return false;
-	}
+//	public boolean makeTransaction(String action, double amount, String reference, Date tdate) {
+//		// new transaction(date, action, amount, account, reference)
+//		
+//		if (action.equals("payment")) { // sending money to a business
+//			String type = "OUT";
+//			Transaction t = null;
+//			if (takeOut(amount) != -1)
+//				// make transaction
+//				t = new Transaction(tdate, this, amount, reference, type);
+//				transactions[tindex] = t;
+//				tindex++;
+//				return true;
+//		}
+//		else if (action.equals("receipt")) { // receiving money to account 
+//			String type = "IN";
+//			Transaction t;
+//			deposit(amount, getCurrency());
+//			// make transaction
+//			t = new Transaction(tdate, this, amount, reference, type);
+//			transactions[tindex] = t;
+//			tindex++;
+//			
+//			if (over10 != null) {
+//				if (this.getBalance() >= 10000) {
+//					over10 = Date.getCurrentDate();
+//					newDate = new Date(over10.getMonth(),over10.getDay(),over10.getYear()+1);
+//				}
+//			}
+//			return true;
+//		}
+//		
+//		else if (action.equals("deposit")) { // depositing money to own account
+//			String type = "IN";
+//			Transaction t;
+//			reference = "Deposit";
+//			deposit(amount, getCurrency());
+//			// make transaction 
+//			t = new Transaction(tdate, this, amount, reference, type);
+//			transactions[tindex] = t;
+//			tindex++;
+//			
+//			if (over10 != null) {
+//				if (this.getBalance() >= 10000) {
+//					over10 = Date.getCurrentDate();
+//					newDate = new Date(over10.getMonth(),over10.getDay(),over10.getYear()+1);
+//				}
+//			}
+//			return true;
+//		}
+//		
+//		System.out.println("Invalid Transaction");
+//		return false;
+//	}
 	
 	
-	public boolean transfer(Account acc, double amount, Date tdate) {
-		if (this.getCurrency().equals(acc.getCurrency())) {
-			this.takeOut(amount);
-			acc.deposit(amount, currency);
-			Transaction t,t2 = null;
-			t = new Transaction(tdate, this, amount, "Transfer " + acc.getID(), "OUT");
-			transactions[tindex] = t;
-			tindex++;
-			t2 = new Transaction(tdate, acc, amount, "Transfer " + this.getID(), "IN");
-			acc.getTransactions()[acc.getTransactionIndex()] = t2;
-			acc.incrementTransactionIndex();
-			
-			if (over10 != null) {
-				if (this.getBalance() >= 10000) {
-					over10 = Date.getCurrentDate();
-					newDate = new Date(over10.getMonth(),over10.getDay(),over10.getYear()+1);
-				}
-			}
-			return true;
-		}
-		else {
-			System.out.println("Transfer failed. The accounts are based in different currencies.");
-			return false;
-		}
-	}
+//	public boolean transfer(Account acc, double amount, Date tdate) {
+//		if (this.getCurrency().equals(acc.getCurrency())) {
+//			this.takeOut(amount);
+//			acc.deposit(amount, currency);
+//			Transaction t,t2 = null;
+//			t = new Transaction(tdate, this, amount, "Transfer " + acc.getID(), "OUT");
+//			transactions[tindex] = t;
+//			tindex++;
+//			t2 = new Transaction(tdate, acc, amount, "Transfer " + this.getID(), "IN");
+//			acc.getTransactions()[acc.getTransactionIndex()] = t2;
+//			acc.incrementTransactionIndex();
+//			
+//			if (over10 != null) {
+//				if (this.getBalance() >= 10000) {
+//					over10 = Date.getCurrentDate();
+//					newDate = new Date(over10.getMonth(),over10.getDay(),over10.getYear()+1);
+//				}
+//			}
+//			return true;
+//		}
+//		else {
+//			System.out.println("Transfer failed. The accounts are based in different currencies.");
+//			return false;
+//		}
+//	}
 	
 	
 	public boolean getInterest() {

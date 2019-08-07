@@ -2,12 +2,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.Color;
+import java.awt.FlowLayout;
+
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.DefaultComboBoxModel;
@@ -108,10 +111,26 @@ public class accountOverview extends JPanel {
 		JButton withdrawB = new JButton("Withdraw");
 		withdrawB.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Withdraw");
+				System.out.println("aOverview Withdraw");
 				double amount = Double.parseDouble(withdraw.getText());
-				account.makeTransaction("payment", amount, "Withdraw", Date.getCurrentDate());
+				System.out.println("aOverview continue");
 				
+				// WITHDRAW FAILED 
+				if (!(account.makeTransaction("payment", amount, "Withdraw", Date.getCurrentDate()))) {
+					System.out.println("Withdraw failed");
+					JFrame error = new JFrame();
+					JPanel errorPanel = new JPanel();
+					JLabel errorLabel = new JLabel("Invalid Withdrawal");
+					
+					errorPanel.add(errorLabel);
+					error.getContentPane().add(errorPanel);
+					
+					error.setTitle("ERROR");
+					error.setSize( 250, 75 );
+					error.setLocation( 250, 200 );
+					error.setVisible( true );
+				}
+				System.out.println("aOverview Withdraw Done");
 				JPanel panelNew = accountOverview.init(frame, client, account);
 				frame.setContentPane(panelNew);
 				frame.revalidate();
@@ -170,7 +189,35 @@ public class accountOverview extends JPanel {
 				String ID = accID.getText();
 				double amount = Double.parseDouble(tranAmount.getText());
 				Account send = client.getAccount(ID);
-				account.transfer(send, amount, Date.getCurrentDate());
+
+				
+				// ACCOUNT NOT FOUND, LOW BALANCE, OR CURRENCY MISMATCH ERRORS
+				if ((send == null) || (account.getBalance() < amount) || (!account.getCurrency().getAcronym().equals((send.getCurrency().getAcronym())))) {
+					JFrame error = new JFrame();
+					JPanel errorPanel = new JPanel();
+					JLabel errorLabel;
+					if ((account.getBalance() < amount)) {
+						System.out.println("Transfer failed, low balance.");
+						errorLabel = new JLabel("Transfer failed, low balance");
+					}
+					else if (send == null) {
+						errorLabel = new JLabel("Account not found");
+					}
+					else {
+						errorLabel = new JLabel("Accounts based in different currencies");
+					}
+					errorPanel.add(errorLabel);
+					error.getContentPane().add(errorPanel);
+					
+					error.setTitle("ERROR");
+					error.setSize( 250, 75 );
+					error.setLocation( 250, 200 );
+					error.setVisible( true );				
+				}
+				else {
+					System.out.println("AccountOverview Transfer else,transfer being called");
+					account.transfer(send, amount, Date.getCurrentDate());
+				}
 				
 				JPanel panelNew = accountOverview.init(frame, client, account);
 				frame.setContentPane(panelNew);
@@ -193,16 +240,68 @@ public class accountOverview extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Asking for loan");
 				double amount = Double.parseDouble(loanAmount.getText().toString());
-				if (account.getBalance() > 5000) {
-					account.makeTransaction("receipt", amount, "LOAN", Date.getCurrentDate());
-				}
-				else 
-					System.out.println("LOAN DENIED. COLLATERAL INSUFFICIENT");
 				
-				JPanel panelNew = accountOverview.init(frame, client, account);
-				frame.setContentPane(panelNew);
-				frame.revalidate();
-				frame.repaint();
+				JFrame loanFrame = new JFrame();
+				loanFrame.getContentPane().setLayout(new FlowLayout());
+				JPanel loanPanel = new JPanel();
+				JLabel ownedLabel = new JLabel("I own:");
+				JCheckBox c1 = new JCheckBox("Personal Real Estate"); 
+		        JCheckBox c2 = new JCheckBox("a Personal Vehicle");
+		        JCheckBox c3 = new JCheckBox("a Business");
+		        JButton done = new JButton("DONE");
+		        done.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						System.out.println("Filled in loan application");
+						
+						boolean app = false;
+						if (c1.isSelected() && c2.isSelected() && c3.isSelected()) {
+							app = true;
+						}
+						else if (c1.isSelected() || c3.isSelected()) {
+							if (amount <= 100000)
+								app = true;
+						}
+						else if (c2.isSelected()) {
+							if (amount <= 10000)
+								app = true;
+						}
+
+						loanFrame.dispose();
+						
+						JFrame result = new JFrame();
+						if (app) {
+							result.getContentPane().add(new JLabel("Loan Approved"));
+							account.makeTransaction("receipt", amount, "LOAN", Date.getCurrentDate());
+							client.giveLoan();
+							
+						}
+						else 
+							result.getContentPane().add(new JLabel("Loan Denied"));
+						result.setTitle("Result");
+						result.setSize( 250, 75 );
+						result.setLocation( 250, 200 );
+						result.setVisible( true );	
+						
+						JPanel panelNew = accountOverview.init(frame, client, account);
+						frame.setContentPane(panelNew);
+						frame.revalidate();
+						frame.repaint();
+					}
+				});
+		        
+		        loanPanel.add(ownedLabel);
+		        loanPanel.add(c1);
+		        loanPanel.add(c2);
+		        loanPanel.add(c3);
+		        
+		        loanFrame.getContentPane().add(loanPanel);
+		        loanFrame.getContentPane().add(done);
+
+				loanFrame.setTitle("PLEASE FILL IN");
+				loanFrame.setSize( 450, 150 );
+				loanFrame.setLocation( 115, 200 );
+				loanFrame.setVisible( true );		
+				
 			}
 		});
 		
@@ -239,6 +338,20 @@ public class accountOverview extends JPanel {
 		separator_3.setForeground(Color.BLACK);
 		separator_3.setBounds(6, 193, 436, 12);
 		panel.add(separator_3);
+		
+		JButton closeAccButton = new JButton("CLOSE ACCOUNT");
+		closeAccButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Closing Account");
+				client.closeAccount(account);
+				JPanel panelNew = clientDisplay.init(frame, client);
+				frame.setContentPane(panelNew);
+				frame.revalidate();
+				frame.repaint();
+			}
+		});
+		closeAccButton.setBounds(278, 48, 166, 26);
+		panel.add(closeAccButton);
 
 		return panel;
 	}

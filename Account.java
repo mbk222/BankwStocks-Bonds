@@ -11,7 +11,7 @@ public class Account {
 	protected Transaction[] transactions = new Transaction[64];
 	protected int tindex = 0;
 	
-	private Date globalDate; // MOVE SOMEWHERE ELSE? 
+	//private Date globalDate; // MOVE SOMEWHERE ELSE? 
 	
 	Random random = new Random();
 	
@@ -35,7 +35,7 @@ public class Account {
 	}
 	
 	public double getBalance() {
-		return balance;
+		return Math.round(balance * 100.00) / 100.00;
 	}
 	
 	public Currency getCurrency() {
@@ -80,23 +80,26 @@ public class Account {
 																// business name
 	public boolean makeTransaction(String action, double amount, String reference, Date tdate) {
 		// new transaction(date, action, amount, account, reference)
-		
+		System.out.println("makeTransaction begin");
 		if (action.equals("payment")) { // sending money to a business
 			String type = "OUT";
 			Transaction t = null;
-			if (takeOut(amount) != -1)
+			System.out.println("makeTransaction start");
+			if (takeOut(amount) != -1) {
+				System.out.println("makeTransaction here");
 				// make transaction
-				t = new Transaction(tdate, this, amount, reference, type);
+				t = new Transaction(tdate, this, Math.round(amount * 100.00) / 100.00, reference, type);
 				transactions[tindex] = t;
 				tindex++;
 				return true;
+			}
 		}
 		else if (action.equals("receipt")) { // receiving money to account 
 			String type = "IN";
 			Transaction t;
 			deposit(amount, getCurrency());
 			// make transaction
-			t = new Transaction(tdate, this, amount, reference, type);
+			t = new Transaction(tdate, this, Math.round(amount * 100.00) / 100.00, reference, type);
 			transactions[tindex] = t;
 			tindex++;
 			return true;
@@ -108,7 +111,7 @@ public class Account {
 			reference = "Deposit";
 			deposit(amount, getCurrency());
 			// make transaction 
-			t = new Transaction(tdate, this, amount, reference, type);
+			t = new Transaction(tdate, this, Math.round(amount * 100.00) / 100.00, reference, type);
 			transactions[tindex] = t;
 			tindex++;
 			return true;
@@ -121,18 +124,21 @@ public class Account {
 	
 	
 	public boolean transfer(Account acc, double amount, Date tdate) {
-		if (this.getCurrency().equals(acc.getCurrency())) {
-			this.takeOut(amount);
+		if (this.getCurrency().getAcronym().equals(acc.getCurrency().getAcronym())) {
+			if (this.takeOut(amount) != -1) {
 			acc.deposit(amount, currency);
-			Transaction t,t2 = null;
-			t = new Transaction(tdate, this, amount, "Transfer " + acc.getID(), "OUT");
-			transactions[tindex] = t;
-			tindex++;
-			t2 = new Transaction(tdate, acc, amount, "Transfer " + this.getID(), "IN");
-			acc.getTransactions()[acc.getTransactionIndex()] = t2;
-			acc.incrementTransactionIndex();
-			// TODO MAKE TRANSACTION ON THIS ACCOUNT AND ACC
-			return true;
+				Transaction t,t2 = null;
+				t = new Transaction(tdate, this, amount, "Transfer " + acc.getID(), "OUT");
+				transactions[tindex] = t;
+				tindex++;
+				t2 = new Transaction(tdate, acc, amount, "Transfer " + this.getID(), "IN");
+				acc.getTransactions()[acc.getTransactionIndex()] = t2;
+				acc.incrementTransactionIndex();
+				// TODO MAKE TRANSACTION ON THIS ACCOUNT AND ACC
+				return true;
+			}
+			System.out.println("Account transfer: failed, balance low");
+			return false;
 		}
 		else {
 			System.out.println("Transfer failed. The accounts are based in different currencies.");
@@ -143,7 +149,7 @@ public class Account {
 	
 	
 	public boolean deposit(double money, Currency curr) {
-		if (currency == curr) {
+		if (currency.getAcronym().equals(curr.getAcronym())) {
 			balance += Math.round(money * 100.00) / 100.00;
 			return true;
 		}	
@@ -161,6 +167,7 @@ public class Account {
 		}
 		else {
 			System.out.println("Insufficient funds. Your current balance is " + balance);
+			System.out.println("Account takeOut");
 			return -1;
 		}
 	}
