@@ -11,16 +11,23 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 public class managerLogin extends JPanel {
+	public managerLogin() {
+		testframe.setBounds(100, 100, 480, 330);
+		testframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		init(testframe);
+	}
 	
-	private static Manager manager = new Manager("Jane", "Doe", "jd");
+	private static Manager manager = new Manager("John", "Doe", "money"); // SET MANAGER USER INFO HERE
 	
 	private static JTextField loginField;
 	private static JPasswordField passwordField;
 	private static JButton loginB;
 	private static JLabel please;
 
+	public static JFrame testframe = new JFrame();
 	
 	public static JPanel init(JFrame frame) {
+		
 		
 		manager.setPassword("1234");
 		
@@ -37,28 +44,51 @@ public class managerLogin extends JPanel {
 		loginField.setColumns(10);
 		
 		JLabel password = new JLabel("Password");
-		password.setBounds(120, 137, 120, 20);
+		password.setBounds(120, 137, 120, 26);
 		panel.add(password);
 		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(199, 137, 130, 20);
+		passwordField.setBounds(199, 137, 130, 26);
 		panel.add(passwordField);
 		
-		loginB = new JButton("Login");
-		loginB.setBounds(162, 205, 117, 29);
+		loginB = new JButton("LOGIN");
+		loginB.setBounds(161, 182, 117, 29);
 		
 		
 		class loginListener implements ActionListener {
 			public void actionPerformed(ActionEvent e ) {
-				String user = loginField.getText();
-				String pass = passwordField.getText();
 				
-				if (manager.checkPassword( pass ) ) 
+				String user = loginField.getText();
+				String pass = new String(passwordField.getPassword());
+				
+				
+				if (manager.checkPassword( pass ) && manager.checkLogin(user)) {
 					System.out.println("Manager Logged In");
 					JPanel panelNew = managerDisplay.init(frame, manager);
 					frame.setContentPane(panelNew);
 					frame.revalidate();
 					frame.repaint();
+				}
+				else {
+					System.out.println("Manager wrong password");
+					
+					JFrame error = new JFrame();
+					JPanel errorPanel = new JPanel();
+					
+					JLabel label = new JLabel("Invalid Login and Password");
+					
+					errorPanel.add(label);
+					error.add(errorPanel);
+					error.setTitle("ERROR");
+					error.setSize( 250, 75 );
+					error.setLocation( 250, 200 );
+					error.setVisible( true );
+					
+					JPanel panelNew = managerLogin.init(frame);
+					frame.setContentPane(panelNew);
+					frame.revalidate();
+					frame.repaint();
+				}
 			}
 		}
 		
@@ -71,7 +101,7 @@ public class managerLogin extends JPanel {
 		please = new JLabel("Please input your login information");
 		please.setHorizontalAlignment(SwingConstants.CENTER);
 		please.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-		please.setBounds(83, 55, 289, 16);
+		please.setBounds(83, 55, 289, 29);
 		panel.add(please);
 		
 		return panel;
