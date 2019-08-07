@@ -1,18 +1,12 @@
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import java.awt.Color;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.*;
+import java.util.List;
+import java.util.Random;
 
 public class BondMarketOverview extends JPanel {
 	
@@ -42,13 +36,16 @@ public class BondMarketOverview extends JPanel {
 	 * Create the panel.
 	 */
 	public static JPanel init(JFrame frame, Client client, Securities account) {
-		BondMarket.init(); // initiliazing bond market
+		//BondMarket.init(); // initiliazing bond market
+		BondMarket.setMarket(SqlFunc.getAllBond());
 
 		double unrealizedBond = 0.0;
-		
-		for (Bond b : account.getBondList()) {
-			if (LocalDate.now().compareTo(b.getSellBy()) >= 0) {
-				unrealizedBond += (b.getAmount()*b.getInterest());
+
+		List<boughtBond> lst = SqlFunc.getBondBoughtByCustomerId(client.getId());
+		for (boughtBond b : lst) {
+			Bond bond = SqlFunc.getBondByName(b.getBondName());
+			if (LocalDate.now().compareTo(b.getDate()) >= 0) {
+				unrealizedBond += (b.getBoughtAmount()*bond.getInterest());
 			}
 		}
 
@@ -85,6 +82,7 @@ public class BondMarketOverview extends JPanel {
 		panelN.setLayout(null);
 		
 	//	JLabel label = new JLabel(account.displayTransactions());
+
 		JLabel label = new JLabel(BondMarket.displayMarket()); 
 		label.setBounds(6, 0, 212, 90);
 		panelN.add(label);
@@ -119,9 +117,12 @@ public class BondMarketOverview extends JPanel {
 				System.out.println(name);
 				System.out.println(amount);
 				BondMarket.buyBond(BondMarket.getBond(name), amount, account, Date.getCurrentDate());
-				
+				Bond tmp = SqlFunc.getBondByName(name);
+				Random random = new Random();
+				String bondID = String.format("%04d", random.nextInt(10000)); // 5 digit ID;
+				SqlFunc.insertBondBought(client.getId(),name,amount,LocalDate.now().plusDays(tmp.getLength() * 7),0,tmp.getLength(),bondID);
+
 			//	StockMarket.buyStock(StockMarket.getStock(ticker), shares, account, Date.getCurrentDate());
-				
 				JPanel panelNew = BondMarketOverview.init(frame, client, account);
 				frame.setContentPane(panelNew);
 				frame.revalidate();
@@ -156,11 +157,9 @@ public class BondMarketOverview extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String name = textField.getText();
 				String ID = tickerChart.getText();
-				
-				System.out.println(name);
-				System.out.println(ID);
-				
-				BondMarket.sellBond(account, ID, Date.getCurrentDate());
+
+				List<boughtBond> lst = SqlFunc.getBondBoughtByCustomerId(client.getId());
+				BondMarket.sellBond(account, lst, ID, Date.getCurrentDate());
 				//StockMarket.sellStocks(StockMarket.getStock(ticker), shares, account, Date.getCurrentDate());
 				
 				JPanel panelNew = BondMarketOverview.init(frame, client, account);
@@ -182,12 +181,19 @@ public class BondMarketOverview extends JPanel {
 		ownedStocksPanel.setBackground(Color.WHITE);
 		ownedStocksPanel.setBounds(6, 185, 438, 65);
 		panel.add(ownedStocksPanel);
-		
-		JLabel ownedStocksLabel = new JLabel("");
-		ownedStocksLabel = new JLabel(account.displayBondL());
+
+		List<boughtBond> lstBond = SqlFunc.getBondBoughtByCustomerId(client.getId());
+		System.out.println("------------");
+		System.out.println(SqlFunc.displayBond(lstBond));
+		System.out.println("------------");
+		String str = SqlFunc.displayBond(lstBond);
+		JTextArea ownedStocksLabel = new JTextArea(str);
+		JScrollPane sourceListScroller = new JScrollPane(ownedStocksLabel);
+		sourceListScroller.setPreferredSize(new Dimension(120, 300));
+		sourceListScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 	//	ownedStocksLabel = new JLabel("<html>Corporate Bond | Maturity Date: 09/05/19<br/> Government Bond | Maturity Date: 11/05/19</html>");
-		ownedStocksLabel.setBounds(6, 0, 426, 65);
-		ownedStocksPanel.add(ownedStocksLabel);
+		sourceListScroller.setBounds(6, 0, 426, 65);
+		ownedStocksPanel.add(sourceListScroller);
 		
 		JLabel sellID = new JLabel("ID");
 		sellID.setBounds(348, 85, 30, 20);

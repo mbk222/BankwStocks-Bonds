@@ -212,10 +212,10 @@ public class securitiesOverview extends JPanel {
 				
 				
 				
-				JPanel panelNew = StockMarketOverview.init(frame, client, account);
-				frame.setContentPane(panelNew);
-				frame.revalidate();
-				frame.repaint();
+//				JPanel panelNew = StockMarketOverview.init(frame, client, account);
+//				frame.setContentPane(panelNew);
+//				frame.revalidate();
+//				frame.repaint();
 			}
 		});
 		stockMarketButton.setBounds(6, 153, 200, 32);

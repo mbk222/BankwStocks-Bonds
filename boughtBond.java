@@ -1,18 +1,24 @@
-import java.sql.Timestamp;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public class boughtBond {
     private int customerid;
-    private int typeChose;
+    private String id;
+    private String bondName;
     private double boughtAmount;
-    private Timestamp date;
+    private LocalDate date;
     private int sb;
+    private int type;
 
-    public boughtBond(int customerid, int typeChose, double boughtAmount, Timestamp date, int sb){
+    public boughtBond(int customerid, String id, String bondName, double boughtAmount, LocalDate date, int sb, int type){
         this.customerid = customerid;
-        this.typeChose = typeChose;
+        this.id = id;
+        this.bondName = bondName;
         this.boughtAmount = boughtAmount;
         this.date = date;
         this.sb = sb;
+        this.type = type;
     }
 
     public int getCustomerid() {
@@ -23,12 +29,12 @@ public class boughtBond {
         this.customerid = customerid;
     }
 
-    public int getTypeChose() {
-        return typeChose;
+    public String getBondName() {
+        return bondName;
     }
 
-    public void setTypeChose(int typeChose) {
-        this.typeChose = typeChose;
+    public void setBondName(String bondName) {
+        this.bondName = bondName;
     }
 
     public double getBoughtAmount() {
@@ -39,11 +45,11 @@ public class boughtBond {
         this.boughtAmount = boughtAmount;
     }
 
-    public Timestamp getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -54,4 +60,22 @@ public class boughtBond {
     public void setSb(int sb) {
         this.sb = sb;
     }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+
 }

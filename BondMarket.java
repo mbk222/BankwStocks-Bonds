@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
@@ -60,25 +61,32 @@ public class BondMarket {
 			account.makeTransaction("payment", amount, "BUY BOND", tdate);
 		}
 		else {
+			JOptionPane.showMessageDialog(null, "Low Balance", "ERROR", JOptionPane.ERROR_MESSAGE);
+
 			// COULDN'T BUY BOND
 		}
     }
 
-    public static void sellBond(Securities account, String bondID, Date tdate) {
-    	for (int i=0; i < account.getBondList().size(); i++) {
-    		Bond accountBond = account.getBondList().get(i);
-    		if (accountBond.getBondId().equals(bondID)) {
-    			if (LocalDate.now().compareTo(accountBond.getSellBy()) >= 0) {
+    public static void sellBond(Securities account, List<boughtBond> lst,String bondID, Date tdate) {
+
+    	for (int i=0; i < lst.size(); i++) {
+			boughtBond bt = lst.get(i);
+			Bond accountBond = SqlFunc.getBondByName(bt.getBondName());
+    		if (bt.getId().equals(bondID)) {
+				SqlFunc.deleteboughtBondById(bondID);
+    			if (LocalDate.now().compareTo(bt.getDate()) >= 0) {
     				System.out.println("Interest recieved");
-					account.makeTransaction("receipt", ((accountBond.getAmount() + accountBond.getAmount()) * accountBond.getInterest()), "SELL BOND", tdate);
-					account.getBondList().remove(i);
+					account.makeTransaction("receipt", (bt.getBoughtAmount() + (bt.getBoughtAmount() * accountBond.getInterest())), "SELL BOND", tdate);
+					//account.getBondList().remove(i);
 				}
 				else {
 					System.out.println("No interest");
-					account.makeTransaction("receipt", accountBond.getAmount(), "SELL BOND", tdate);
-					account.getBondList().remove(i);
+					account.makeTransaction("receipt", bt.getBoughtAmount(), "SELL BOND", tdate);
+					//account.getBondList().remove(i);
 				}
-    		}
+    		} else {
+				JOptionPane.showMessageDialog(null, "You don't have such bond", "ERROR", JOptionPane.ERROR_MESSAGE);
+			}
     	}
     }
 	
@@ -98,7 +106,31 @@ public class BondMarket {
 		}
 		return fin + "</html>";
 	}
-	
+
+	public static ArrayList<Bond> getMarket() {
+		return market;
+	}
+
+	public static void setMarket(ArrayList<Bond> market) {
+		BondMarket.market = market;
+	}
+
+	public static Bond[] getBonds() {
+		return bonds;
+	}
+
+	public static void setBonds(Bond[] bonds) {
+		BondMarket.bonds = bonds;
+	}
+
+	public static int getMarketSize() {
+		return marketSize;
+	}
+
+	public static void setMarketSize(int marketSize) {
+		BondMarket.marketSize = marketSize;
+	}
+
 	public static void main(String[] args) {
 		Securities s = new Securities();
 		Bond b = new Bond();

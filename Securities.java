@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Securities extends Account {
 	//private Currency USD = new Currency("USD", "Dollars");
@@ -84,6 +85,7 @@ public class Securities extends Account {
 		}
 		return res + "</html>";
 	}
+
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
