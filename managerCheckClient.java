@@ -12,71 +12,80 @@ public class managerCheckClient extends JPanel {
 	private static JTextField fnameField;
 	private static JTextField mnameField;
 	private static JTextField lnameField;
-	private static JTextField loginField;
 	private static JPanel panel = new JPanel();
 	
+//	private static JFrame testframe = new JFrame();
+//	private static Manager testmanager = new Manager("a","b","c");
+//	
+//	public managerCheckClient() {
+//		testframe.setBounds(100, 100, 480, 330);
+//		testframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		init(testframe, testmanager);
+//	}
 
 	public static JPanel init(JFrame frame, Manager manager) {
 		panel.setLayout(null);
 		
-		JLabel please = new JLabel("Please input information of the client you are looking for:");
-		please.setBounds(39, 37, 371, 16);
+		JLabel please = new JLabel("Please input the information of the client you are looking for:");
+		please.setBounds(52, 67, 371, 16);
 		please.setHorizontalAlignment(SwingConstants.CENTER);
 		panel.add(please);
 		
 		JLabel fname = new JLabel("First Name");
-		fname.setBounds(112, 70, 100, 20);
+		fname.setBounds(130, 105, 100, 20);
 		panel.add(fname);
 		
 		JLabel mname = new JLabel("Middle Name");
-		mname.setBounds(112, 99, 100, 20);
+		mname.setBounds(130, 136, 100, 20);
 		panel.add(mname);
 		
 		JLabel lname = new JLabel("Last Name");
-		lname.setBounds(112, 131, 100, 20);
+		lname.setBounds(130, 167, 100, 20);
 		panel.add(lname);
 		
-		JLabel login = new JLabel("Login");
-		login.setBounds(112, 163, 100, 20);
-		panel.add(login);
-		
 		fnameField = new JTextField();
-		fnameField.setBounds(224, 70, 130, 20);
+		fnameField.setBounds(209, 105, 130, 20);
 		panel.add(fnameField);
 		fnameField.setColumns(10);
 		
 		mnameField = new JTextField();
 		mnameField.setColumns(10);
-		mnameField.setBounds(224, 96, 130, 20);
+		mnameField.setBounds(209, 136, 130, 20);
 		panel.add(mnameField);
 		
 		lnameField = new JTextField();
 		lnameField.setColumns(10);
-		lnameField.setBounds(224, 128, 130, 20);
+		lnameField.setBounds(209, 167, 130, 20);
 		panel.add(lnameField);
 		
-		loginField = new JTextField();
-		loginField.setColumns(10);
-		loginField.setBounds(224, 160, 130, 20);
-		panel.add(loginField);
-		
-		JButton check = new JButton("Check Client");
+		JButton check = new JButton("FIND CLIENT");
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("Finding client");
 				String firstN = fnameField.getText();
 				String middleN = mnameField.getText();
 				String lastN = lnameField.getText();
-				String loginN = loginField.getText();
+			//	String loginN = loginField.getText();
 				
-				JLabel checkClient = new JLabel( manager.checkClient(new Client(firstN, middleN, lastN, loginN)) );
+				fnameField.setText("");
+				mnameField.setText("");
+				lnameField.setText("");
+				
+				Client found = Database.findClient(firstN, middleN, lastN);
+				
+				JLabel checkClient = new JLabel( "<html>" +  manager.checkClient(found) + "</html>");
 				JPanel clientPanel = new JPanel();
+				
 				clientPanel.add(checkClient);
+				
 				
 				JButton back = new JButton("Back");
 				
 				class backListener implements ActionListener {
 					public void actionPerformed(ActionEvent e ) {
 						JPanel panel_New = managerDisplay.init(frame, manager);
+						
+						clientPanel.removeAll();
 						
 						frame.setContentPane(panel_New);
 						frame.revalidate();
@@ -86,7 +95,10 @@ public class managerCheckClient extends JPanel {
 				
 				backListener backL = new backListener();
 				back.addActionListener(backL);
+				
 				clientPanel.add(back);
+			
+				panel.removeAll();
 				
 				frame.setContentPane(clientPanel);
 				frame.revalidate();
@@ -94,10 +106,41 @@ public class managerCheckClient extends JPanel {
 
 			}
 		});
-		check.setBounds(166, 205, 117, 29);
+		
+		
+//		JButton back = new JButton("Back");
+//		
+//		class backListener implements ActionListener {
+//			public void actionPerformed(ActionEvent e ) {
+//				JPanel panel_New = managerDisplay.init(frame, manager);
+//				
+//				frame.setContentPane(panel_New);
+//				frame.revalidate();
+//				frame.repaint();
+//			}
+//		}
+//		
+//		backListener backL = new backListener();
+//		back.addActionListener(backL);
+//	//	clientPanel.add(back);
+//		
+		
+		check.setBounds(156, 208, 117, 29);
 		panel.add(check);
+		
+		JButton backButton = new JButton("BACK");
+		class backListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				JPanel panel_New = managerDisplay.init(frame, manager);
+				
+			}
+		}
+		backListener backL = new backListener();
+		backButton.addActionListener(backL);
+		
+		backButton.setBounds(156, 242, 117, 29);
+		panel.add(backButton);
 		return panel;
 
 	}
-
 }
