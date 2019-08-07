@@ -24,6 +24,9 @@ public class StockMarket {
 					market.add(stocks[i]);
 			}
 		}
+		for (int i=0; i < marketSize; i++) {
+			market.get(i).randomPrice();
+		}
 	}
 	
 	public static Stock getStock(String ticker) {
@@ -38,7 +41,7 @@ public class StockMarket {
 	public static String displayMarket() {
 		String fin = "<html>";
 		for (int i = 0; i < market.size(); i++) {
-			fin+= market.get(i).getName() + " | " + market.get(i).getTicker() + " | $" + market.get(i).randomPrice() + " per share.<br/>";
+			fin+= market.get(i).getName() + " | " + market.get(i).getTicker() + " | $" + market.get(i).getPrice() + " per share.<br/>";
 		}
 		return fin + "</html>";
 	}
@@ -49,12 +52,18 @@ public class StockMarket {
 		if (i < 0) {
 			market.add(stock);
 		}
+		else{
+			System.out.println("Stock not added");
+		}
 	}
 
 	public static void removeStock(Stock stock) {
 		int i = getIndex(market,stock);
 		if (i >= 0) {
 			market.remove(i);
+		}
+		else{
+			System.out.println("Stock not removed");
 		}
 	}
 	
@@ -98,33 +107,37 @@ public class StockMarket {
 	 
 	 public static void sellStocks(Stock stock, int numShares, Securities securities, Date tdate) {
 		 int totalShares = 0;
+		 // Gets the total number of shares of a stock
 		 for (int i = 0; i < securities.getStockList().size(); i++) {
-			 if (securities.getStockList().get(i).getTicker().equals(stock.getTicker())) {
+			 if (securities.getStockList().get(i).equals(stock)) {
 				 totalShares += securities.getStockList().get(i).getNumOfShares();
 			 }
 		 }
 		 System.out.println("TS" + totalShares);
 		 
+		 // Checks if has enough shares of that stock
 		 if ( numShares <= totalShares) {
 			 double result = 0;
+			 // for every stock in the account
 			 for (int i = 0; i < securities.getStockList().size(); i++) {
+			 	// if it's the correct stock (tickers match)
 				 if (securities.getStockList().get(i).equals(stock)) {
 					 System.out.println("PRICE: " +securities.getStockList().get(i).getPrice());
-					 int has = securities.getStockList().get(i).getNumOfShares();
+					 int has = securities.getStockList().get(i).getNumOfShares(); // num shares your stock has
 					 
 					 if (has == numShares) {
-						 result += securities.getStockList().get(i).getPrice() * securities.getStockList().get(i).getNumOfShares();
+						 result += stock.getPrice() * securities.getStockList().get(i).getNumOfShares();
 						 securities.getStockList().remove(i);
 						 break;
 					 }
 					 else if (has > numShares) {
-						 result += securities.getStockList().get(i).getPrice() * (has - numShares);
+						 result += stock.getPrice() * numShares;
 						 securities.getStockList().get(i).setShares(securities.getStockList().get(i).getNumOfShares() - numShares);
 						 break;
 					 }
 					 else {
 						 numShares -= securities.getStockList().get(i).getNumOfShares();
-						 result += securities.getStockList().get(i).getPrice() * securities.getStockList().get(i).getNumOfShares();
+						 result += stock.getPrice() * securities.getStockList().get(i).getNumOfShares();
 						 securities.getStockList().remove(i);
 					 }
 					
@@ -211,7 +224,18 @@ public class StockMarket {
 //		System.out.println("HERE"+ s.displayStockL());
 //		StockMarket.sellStocks(StockMarket.getStock("AAPL"), 0, s, Date.getCurrentDate());
 //		System.out.println("HERE1"+ s.displayStockL());
-//		
+
+		// init();
+		// Stock s = new Stock();
+		// addStock(s);
+		// System.out.println(displayMarket());
+		// removeStock(s);
+		// System.out.println(displayMarket());
+		// removeStock(s);
+		// addStock(s);
+		// System.out.println(displayMarket());
+		// addStock(new Stock("The Company That Sells Both New And Reused Poop", "POOP",200));
+		// System.out.println(displayMarket());
 		
 		
 	}
