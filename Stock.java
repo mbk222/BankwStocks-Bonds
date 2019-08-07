@@ -104,6 +104,7 @@ public class Stock {
         return name + " | " + ticker + " | $" + String.format("%.2f", price) + " per share.";
     }
  
+ 
 // public void buyStock(Securities acc) { MINE
 //  numOfShares++;
 //  if(!acc.getStockList().contains(this)) {
