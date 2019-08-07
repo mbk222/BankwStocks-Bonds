@@ -13,6 +13,14 @@ public class managerDisplay extends JPanel {
 
 	private static JPanel panel = new JPanel();
 	
+//	private static JFrame testframe = new JFrame();
+//	private static Manager testManager = new Manager("a","b","c");
+//	
+//	public managerDisplay() {
+//		testframe.setBounds(100, 100, 480, 330);
+//		testframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		init(testframe, testManager);
+//	}
 	
 	public static JPanel init(JFrame frame, Manager manager) {
 		panel.setLayout(null);
