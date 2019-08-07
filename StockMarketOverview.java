@@ -105,8 +105,8 @@ public class StockMarketOverview extends JPanel {
     // GET CHART IN HERE
      for (Stock s : account.getStockList()) {
        if (s.getTicker().equals(ID)) {
-         Chart stockChart = new Chart(s);
-         stockChart.begin();
+         System.out.println("hi");
+         Chart.begin(s);
          break;
        }
      }
