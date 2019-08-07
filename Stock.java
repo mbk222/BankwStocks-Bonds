@@ -4,7 +4,7 @@ public class Stock {
 	private String name, ticker;
 	private double price; // per share
 	private int numOfShares = 0;
-	// DATE BOUGHT AT
+	private Date dateBought;
 	// PRICE BOUGHT AT 
 	
 	private Random random = new Random();
@@ -26,6 +26,7 @@ public class Stock {
         this.ticker = stock.getTicker();
         this.price = stock.getPrice();
         this.numOfShares = numShares;
+        dateBought = Date.getCurrentDate();
     }
 
     // Getter Methods:
@@ -46,6 +47,10 @@ public class Stock {
 		return numOfShares;
 	}
 
+	public Date getDateBought() {
+		return dateBought;
+	}
+
 	// Setter Methods:
 
 	public void setName(String name) { 
@@ -62,6 +67,10 @@ public class Stock {
 
     public void setShares(int numOfShares) { 
     	this.numOfShares = numOfShares; 
+    }
+
+    public void setDateBought(Date dateBought) {
+    	this.dateBought = dateBought;
     }
 
     // Other Methods:
