@@ -28,6 +28,6 @@ public class Transaction {
 			sym = "-";
 		
 		
-		return this.date + " ACC.: " + accountID + " REF.: " + reference + " TYPE: " + type + " " + sym + amount + " BAL.: " + newBalance; 
+		return this.date + " ACC: " + accountID + " | REF: " + reference + " | TYPE: " + type + " " + sym + amount + " BAL: " + Math.round(newBalance * 100.00) / 100.00; 
 	}
 }

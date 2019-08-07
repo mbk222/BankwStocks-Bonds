@@ -8,10 +8,10 @@ public class BondMarket {
 	private static ArrayList<Bond> market = new ArrayList<Bond>();
 	private static Bond[] bonds = {
 			new Bond(), // Government Bond
-			new Bond("UK", 250, 0.06, 16),
-			new Bond("BRZ", 150, 0.03, 4),
-			new Bond("TWTR", 100, 0.1, 1),
-			new Bond("EBAY", 75, 0.03, 4)
+			new Bond("UK", 0.06, 16),
+			new Bond("BRZ", 0.03, 4),
+			new Bond("TWTR", 0.1, 1),
+			new Bond("EBAY", 0.03, 4)
 			};
 	
 	
@@ -64,13 +64,13 @@ public class BondMarket {
 		}
     }
 
-    public static void sellBond(Securites account, String bondID Date tdate) {
+    public static void sellBond(Securities account, String bondID, Date tdate) {
     	for (int i=0; i < account.getBondList().size(); i++) {
     		Bond accountBond = account.getBondList().get(i);
-    		if (accountBond.getBondId() == bondID) {
+    		if (accountBond.getBondId().equals(bondID)) {
     			if (LocalDate.now().compareTo(accountBond.getSellBy()) >= 0) {
     				System.out.println("Interest recieved");
-					account.makeTransaction("receipt", ((accountBond.getAmount() + accountBond.getAmount()) * accountBond.getInterest), "SELL BOND", tdate);
+					account.makeTransaction("receipt", ((accountBond.getAmount() + accountBond.getAmount()) * accountBond.getInterest()), "SELL BOND", tdate);
 					account.getBondList().remove(i);
 				}
 				else {
@@ -90,6 +90,21 @@ public class BondMarket {
 			}
 			return -1;
 		}
+	
+	public static String displayMarket() {
+		String fin = "<html>";
+		for (int i = 0; i < market.size(); i++) {
+			fin+= market.get(i) + "<br/>";
+		}
+		return fin + "</html>";
+	}
+	
+	public static void main(String[] args) {
+		Securities s = new Securities();
+		Bond b = new Bond();
+		BondMarket.buyBond(b, 0, s, Date.getCurrentDate());
+		System.out.println(s.displayBondL());
+	}
 	 
 	
 }

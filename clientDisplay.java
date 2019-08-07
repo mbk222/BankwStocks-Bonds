@@ -82,22 +82,57 @@ public class clientDisplay extends JPanel {
 				String currency = curr.getSelectedItem().toString();
 				Currency c = null;
 				
-				for (int i = 0; i < currencies.length; i++) {
-					if (currency.equals(currencies[i].getAcronym())) {
-						c = currencies[i];
+				
+				// CHECKS IF SECURITIES ACCOUNT CAN BE OPENED
+				boolean openSec = true; 
+				if (type.equals("Securities")) {
+					openSec = false;
+					for (int i = 0; i < client.countAccounts(); i++) {
+						if (client.getAccounts().get(i).getCurrency().getAcronym().equals("USD")) {
+							if (client.getAccounts().get(i).getBalance() >= 0) // CHANGE THIS BACK TO 5000
+								openSec = true;
+						}
 					}
 				}
-				if (type.equals("Securities")) {
-					client.openTypeAccount(type, 0, USD);
+				
+				if (!openSec) {
+					JFrame error = new JFrame();
+					JPanel errorPanel = new JPanel();
+					
+					JLabel label = new JLabel("One account must have at least 5000 USD");
+					
+					errorPanel.add(label);
+					error.add(errorPanel);
+					
+					error.setTitle("ERROR");
+					error.setSize( 260, 75 );
+					error.setLocation( 250, 200 );
+					error.setVisible( true );
+					
+					JPanel panelNew = clientDisplay.init(frame, client);
+					frame.setContentPane(panelNew);
+					frame.revalidate();
+					frame.repaint();
 				}
 				else {
-				client.openTypeAccount(type, 0, c);
+				
+					for (int i = 0; i < currencies.length; i++) {
+						if (currency.equals(currencies[i].getAcronym())) {
+							c = currencies[i];
+						}
+					}
+					if (type.equals("Securities")) {
+						client.openTypeAccount(type, 0, USD);
+					}
+					else {
+						client.openTypeAccount(type, 0, c);
+					}
+					// call clientOverview again
+					JPanel panelNew = clientDisplay.init(frame, client);
+					frame.setContentPane(panelNew);
+					frame.revalidate();
+					frame.repaint();
 				}
-				// call clientOverview again
-				JPanel panelNew = clientDisplay.init(frame, client);
-				frame.setContentPane(panelNew);
-				frame.revalidate();
-				frame.repaint();
 			}
 		});
 		
@@ -123,15 +158,33 @@ public class clientDisplay extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("account overview of");
 				String ID = accNum.getText();
+				
+				// ACCOUNT NOT FOUND ERROR
+				if (client.getAccount(ID) == null) {
+					JFrame error = new JFrame();
+					JPanel errorPanel = new JPanel();
+					
+					JLabel label = new JLabel("Account not found");
+					
+					errorPanel.add(label);
+					error.add(errorPanel);
+					
+					error.setTitle("ERROR");
+					error.setSize( 250, 75 );
+					error.setLocation( 250, 200 );
+				//	error.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+					error.setVisible( true );
+					
+					JPanel panelNew = clientDisplay.init(frame, client);
+					frame.setContentPane(panelNew);
+					frame.revalidate();
+					frame.repaint();
+				}
+				else {
+				
 				Account account = client.getAccount(ID);
 				
-				// use this when error checking:
-//				JFrame error = new JFrame();
-//				error.setTitle("ERROR");
-//				error.setSize( 250, 250 );
-//				error.setLocation( 300, 100 );
-//				error.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-//				error.setVisible( true );
+
 				JPanel panelNew = null;
 				if (account.type().equals("Securities")) {
 					panelNew = securitiesOverview.init(frame, client, (Securities) account);
@@ -141,6 +194,7 @@ public class clientDisplay extends JPanel {
 				frame.setContentPane(panelNew);
 				frame.revalidate();
 				frame.repaint();
+				}
 			}
 		});
 		
