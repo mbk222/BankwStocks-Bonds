@@ -37,19 +37,17 @@ public class Chart extends javax.swing.JFrame { // only applicable for market st
         };
         cp.setMouseWheelEnabled(true);
         add(cp);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        pack();
+              setDefaultCloseOperation(EXIT_ON_CLOSE);
+      pack();
     }
-
-    public void begin() {
-      this.setVisible(true);
-//
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//              Stock stock = new Stock();
-//                new ChartTest(stock).setVisible(true);
-//            }
-//        });
+    
+    public static void begin(Stock s) {
+      
+      java.awt.EventQueue.invokeLater(new Runnable() {
+        @Override
+        public void run() {
+          new Chart(s).setVisible(true);
+        }
+      });
     }
 }

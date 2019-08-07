@@ -1,5 +1,12 @@
 1. Add manager code
 	A. View history
 2. Add fees for loan, withdraw, create, close account
-3. Documentation
-4. 5000 error check
+3. Checking account has 630000 yen
+4. CNY is for Yuan and NOT YEN
+5. If my account is not in USD, I cannot trade?
+6. Depositing no money threw an exception(good though?)
+
+3. Write a broke account and show how it can't create securities but that it has history
+4. Add securities account live
+5. Show added securities account
+6. Load new securities account with price history
