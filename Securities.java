@@ -12,6 +12,13 @@ public class Securities extends Account {
 		super();
 		type = "Securities";
 	}
+
+	public Securities(String type, double balance, Currency curr, String accountID) {
+		this.type = type;
+		this.balance = balance;
+		this.currency = curr;
+		this.accountID = accountID;
+	}
 	
 	public ArrayList<Stock> getStockList() {
 		return stocks;

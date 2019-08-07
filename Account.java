@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.Random;
 
 public class Account {
@@ -5,7 +6,7 @@ public class Account {
 	protected String type;
 	protected double balance;
 	protected Currency currency;
-	private String accountID;
+	protected String accountID;
 	protected Date dateOpened;
 	
 	protected Transaction[] transactions = new Transaction[64];
@@ -32,6 +33,13 @@ public class Account {
 		balance = Math.round(amount * 100.00) / 100.00;
 		currency = curr;
 		accountID = String.format("%04d", random.nextInt(10000)); // 4 digit ID
+	}
+
+	public Account(String type, double balance, Currency curr, String accountID) {
+		this.type = type;
+		this.balance = balance;
+		this.currency = curr;
+		this.accountID = accountID;
 	}
 	
 	public double getBalance() {
@@ -85,13 +93,19 @@ public class Account {
 			String type = "OUT";
 			Transaction t = null;
 			System.out.println("makeTransaction start");
+			if(amount <= 0){
+				return false;
+			}
 			if (takeOut(amount) != -1) {
 				System.out.println("makeTransaction here");
 				// make transaction
-				t = new Transaction(tdate, this, Math.round(amount * 100.00) / 100.00, reference, type);
-				transactions[tindex] = t;
-				tindex++;
+				//t = new Transaction(tdate, this, Math.round(amount * 100.00) / 100.00, reference, type);
+				SqlFunc.insertTransaction(Integer.valueOf(this.getID()),Math.round(amount * 100.00) / 100.00,this.balance,reference,1,tdate);
+				//transactions[tindex] = t;
+				//tindex++;
 				return true;
+			} else {
+				return false;
 			}
 		}
 		else if (action.equals("receipt")) { // receiving money to account 
@@ -99,9 +113,10 @@ public class Account {
 			Transaction t;
 			deposit(amount, getCurrency());
 			// make transaction
-			t = new Transaction(tdate, this, Math.round(amount * 100.00) / 100.00, reference, type);
-			transactions[tindex] = t;
-			tindex++;
+			//t = new Transaction(tdate, this, Math.round(amount * 100.00) / 100.00, reference, type);
+			SqlFunc.insertTransaction(Integer.valueOf(this.getID()),Math.round(amount * 100.00) / 100.00,this.balance,reference,0,tdate);
+			//transactions[tindex] = t;
+			//tindex++;
 			return true;
 		}
 		
@@ -109,11 +124,18 @@ public class Account {
 			String type = "IN";
 			Transaction t;
 			reference = "Deposit";
-			deposit(amount, getCurrency());
+			if(amount <= 0){
+				return false;
+			}
+			if(!deposit(amount, getCurrency())) {
+				return false;
+			}
+
 			// make transaction 
-			t = new Transaction(tdate, this, Math.round(amount * 100.00) / 100.00, reference, type);
-			transactions[tindex] = t;
-			tindex++;
+			//t = new Transaction(tdate, this, Math.round(amount * 100.00) / 100.00, reference, type);
+			SqlFunc.insertTransaction(Integer.valueOf(this.getID()),Math.round(amount * 100.00) / 100.00,this.balance,reference,0,tdate);
+			//transactions[tindex] = t;
+			//tindex++;
 			return true;
 		}
 		
@@ -131,6 +153,7 @@ public class Account {
 				t = new Transaction(tdate, this, amount, "Transfer " + acc.getID(), "OUT");
 				transactions[tindex] = t;
 				tindex++;
+				SqlFunc.insertTransaction(Integer.valueOf(this.getID()),Math.round(amount * 100.00) / 100.00,this.balance,"Transfer " + acc.getID(),0,tdate);
 				t2 = new Transaction(tdate, acc, amount, "Transfer " + this.getID(), "IN");
 				acc.getTransactions()[acc.getTransactionIndex()] = t2;
 				acc.incrementTransactionIndex();
@@ -151,6 +174,8 @@ public class Account {
 	public boolean deposit(double money, Currency curr) {
 		if (currency.getAcronym().equals(curr.getAcronym())) {
 			balance += Math.round(money * 100.00) / 100.00;
+			System.out.println(this.getID());
+			SqlFunc.updateAccountBalanceByAid(Integer.parseInt(this.getID()),balance);
 			return true;
 		}	
 		else { 
@@ -163,6 +188,7 @@ public class Account {
 	public double takeOut(double money) {
 		if (Math.round(money * 100.00) / 100.00 <= balance) {
 			balance -= Math.round(money * 100.00) / 100.00;
+			SqlFunc.updateAccountBalanceByAid(Integer.parseInt(this.getID()),balance);
 			return money;
 		}
 		else {
@@ -179,6 +205,7 @@ public class Account {
 		}
 		else {
 			double newbal = currency.convertTo(balance, cur.getAcronym()); // new balance after Currency change
+			SqlFunc.updateAccountBalanceByAid(Integer.parseInt(this.getID()),newbal);
 			balance = newbal;
 			currency = cur;
 			return true;
@@ -192,13 +219,23 @@ public class Account {
 	public String displayTransactions() {
 		String res = "<html>";
 		for (int i = 0; i < transactions.length; i++) {
-			if (transactions[i] == null) 
+			if (transactions[i] == null)
 				return res;
 			res+= transactions[i] + "<br/>";
 		}
 		return res+"</html>";
 	}
-	
+
+	public String displayTransactions(List<Transaction> lstTransaction) {
+		String res = "";
+		for (int i = 0; i < lstTransaction.size(); i++) {
+			if (lstTransaction.get(i) == null)
+				return res;
+			res+= lstTransaction.get(i) + "\n";
+		}
+		return res+"\n";
+	}
+
 //	public static void main(String[] args) {
 //		Currency USD = new Currency("USD", "Dollars");
 //		Currency RUB = new Currency("RUB", "Rubles");

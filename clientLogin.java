@@ -1,14 +1,10 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import java.awt.Font;
-import javax.swing.SwingConstants;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class clientLogin extends JPanel {
 	private static JTextField loginField;
@@ -21,7 +17,14 @@ public class clientLogin extends JPanel {
 	
 	public clientLogin() {
 		testframe.setBounds(100, 100, 480, 330);
-		testframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//testframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		testframe.addWindowListener(new WindowAdapter() {
+//			@Override
+//			public void windowClosing(WindowEvent e) {
+//				System.out.println("WindowClosingDemo.windowClosing");
+//				System.exit(0);
+//			}
+//		});
 		init(testframe);
 	}
 	
@@ -55,37 +58,56 @@ public class clientLogin extends JPanel {
 			public void actionPerformed(ActionEvent e ) {
 				String user = loginField.getText();
 				String pass1 = passwordField.getText();
-				
+
+				//SqlFunc.init();
+				Client client = SqlFunc.getCustomerByUsername(user);
+				if(client == null){
+					JOptionPane.showMessageDialog(null, "No such user!", "ERROR",JOptionPane.ERROR_MESSAGE);
+
+				}else{
+					if(!client.checkPassword(pass1)){
+						JOptionPane.showMessageDialog(null, "Wrong password!", "ERROR",JOptionPane.ERROR_MESSAGE);
+					}else{
+						JPanel panelNew = clientDisplay.init(frame, client);
+
+						frame.setContentPane(panelNew);
+						frame.revalidate();
+						frame.repaint();
+					}
+				}
+				//SqlFunc.close();
+
+
 				// INVALID LOGIN ERROR
-				if (Database.findClient(user, pass1) == null) {
-					JFrame error = new JFrame();
-					JPanel errorPanel = new JPanel();
-					
-					JLabel label = new JLabel("Invalid Username and Password");
-					
-					errorPanel.add(label);
-					error.add(errorPanel);
-					
-					error.setTitle("ERROR");
-					error.setSize( 250, 75 );
-					error.setLocation( 250, 200 );
-				//	error.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-					error.setVisible( true );
-					
+//				if (Database.findClient(user, pass1) == null) {
+//					JFrame error = new JFrame();
+//					JPanel errorPanel = new JPanel();
+//
+//					JLabel label = new JLabel("Invalid Username and Password");
+//
+//					errorPanel.add(label);
+//					error.add(errorPanel);
+//
+//					error.setTitle("ERROR");
+//					error.setSize( 250, 75 );
+//					error.setLocation( 250, 200 );
+//				//	error.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+//					error.setVisible( true );
+//
+////					JPanel panelNew = clientDisplay.init(frame, client);
+////					frame.setContentPane(panelNew);
+////					frame.revalidate();
+////					frame.repaint();
+//				}
+//				else {
+//					Client client = Database.findClient(user, pass1);
+//					System.out.println(Database.checkUserPass(user,pass1));
 //					JPanel panelNew = clientDisplay.init(frame, client);
+//
 //					frame.setContentPane(panelNew);
 //					frame.revalidate();
 //					frame.repaint();
-				}
-				else {
-					Client client = Database.findClient(user, pass1);
-					System.out.println(Database.checkUserPass(user,pass1));
-					JPanel panelNew = clientDisplay.init(frame, client);
-	
-					frame.setContentPane(panelNew);
-					frame.revalidate();
-					frame.repaint();
-				}
+//				}
 				
 			}
 		}

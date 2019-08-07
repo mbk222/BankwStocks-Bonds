@@ -16,6 +16,8 @@ import javax.swing.JPasswordField;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class GUI {
 	
@@ -54,9 +56,17 @@ public class GUI {
 	 * Initialize the contents of the frame.
 	 */
 	public static JPanel initialize(JFrame frame) {
+		SqlFunc.init();
 		//frame = new JFrame();
 		frame.setBounds(100, 100, 480, 330);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				SqlFunc.close();
+				System.exit(0);
+			}
+		});
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		
