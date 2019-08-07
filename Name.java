@@ -25,5 +25,16 @@ public class Name {
 			return (fname + " " + mname + " " + lname);
 	}
 	
+	public String getfname() {
+		return fname;
+	}
+	
+	public String getmname() {
+		return mname;
+	}
+	
+	public String getlname() {
+		return lname;
+	}
 
 }
