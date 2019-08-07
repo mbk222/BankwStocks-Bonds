@@ -1,13 +1,5 @@
 1. Add manager code
-2. Add fees for loan, withdraw, create, close
-3. ReadMe
-4. Documentation
-
-JIAN:
-
-KURT:
-
-AMANDA:
-
-ADAM:
-
+	A. View history
+2. Add fees for loan, withdraw, create, close account
+3. Documentation
+4. 5000 error check
