@@ -1,19 +1,9 @@
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import java.awt.Color;
-import java.awt.FlowLayout;
-
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.*;
+import java.util.List;
 
 public class accountOverview extends JPanel {
 	
@@ -23,7 +13,7 @@ public class accountOverview extends JPanel {
 	
 	public accountOverview() {
 		testframe.setBounds(100, 100, 480, 330);
-		testframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//testframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		init(testframe, testclient, testaccount);
 	}
 	
@@ -75,10 +65,14 @@ public class accountOverview extends JPanel {
 		panelN.setBounds(6, 81, 438, 76);
 		panel.add(panelN);
 		panelN.setLayout(null);
-		
-		JLabel label = new JLabel(account.displayTransactions());
-		label.setBounds(6, 0, 426, 64);
-		panelN.add(label);
+
+		List<Transaction> lstTransaction = SqlFunc.getAllTransactionByAccountid(Integer.parseInt(account.getID()));
+		JTextArea label = new JTextArea(account.displayTransactions(lstTransaction));
+		JScrollPane sourceListScroller = new JScrollPane(label);
+		sourceListScroller.setPreferredSize(new Dimension(120, 300));
+		sourceListScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		sourceListScroller.setBounds(6, 0, 426, 64);
+		panelN.add(sourceListScroller);
 		
 		deposit = new JTextField();
 		deposit.setBounds(128, 163, 79, 26);
@@ -91,7 +85,9 @@ public class accountOverview extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Deposit");
 				double amount = Double.parseDouble(deposit.getText());
-				account.makeTransaction("deposit", amount, "DEPOSIT", Date.getCurrentDate());
+				if(!account.makeTransaction("deposit", amount, "DEPOSIT", Date.getCurrentDate())){
+					JOptionPane.showMessageDialog(null, "Invalid Operation, positve value and USD only", "ERROR", JOptionPane.ERROR_MESSAGE);
+				}
 				
 				JPanel panelNew = accountOverview.init(frame, client, account);
 				frame.setContentPane(panelNew);
@@ -118,17 +114,19 @@ public class accountOverview extends JPanel {
 				// WITHDRAW FAILED 
 				if (!(account.makeTransaction("payment", amount, "Withdraw", Date.getCurrentDate()))) {
 					System.out.println("Withdraw failed");
-					JFrame error = new JFrame();
-					JPanel errorPanel = new JPanel();
-					JLabel errorLabel = new JLabel("Invalid Withdrawal");
-					
-					errorPanel.add(errorLabel);
-					error.getContentPane().add(errorPanel);
-					
-					error.setTitle("ERROR");
-					error.setSize( 250, 75 );
-					error.setLocation( 250, 200 );
-					error.setVisible( true );
+					JOptionPane.showMessageDialog(null, "Invalid Operation, positve value or balance low", "ERROR", JOptionPane.ERROR_MESSAGE);
+
+//					JFrame error = new JFrame();
+//					JPanel errorPanel = new JPanel();
+//					JLabel errorLabel = new JLabel("Invalid Withdrawal");
+//
+//					errorPanel.add(errorLabel);
+//					error.getContentPane().add(errorPanel);
+//
+//					error.setTitle("ERROR");
+//					error.setSize( 250, 75 );
+//					error.setLocation( 250, 200 );
+//					error.setVisible( true );
 				}
 				System.out.println("aOverview Withdraw Done");
 				JPanel panelNew = accountOverview.init(frame, client, account);
@@ -158,6 +156,7 @@ public class accountOverview extends JPanel {
 						c = currencies[i];
 					}
 				}
+				SqlFunc.updateAccountCurrencyByAid(Integer.parseInt(account.getID()),SqlFunc.generateIntCurrency(c));
 				account.changeAccountCurrency(c);
 				
 				JPanel panelNew = accountOverview.init(frame, client, account);
@@ -188,7 +187,7 @@ public class accountOverview extends JPanel {
 				System.out.println("Transfering money");
 				String ID = accID.getText();
 				double amount = Double.parseDouble(tranAmount.getText());
-				Account send = client.getAccount(ID);
+				Account send = SqlFunc.getAccountByAid(Integer.parseInt(ID));
 
 				
 				// ACCOUNT NOT FOUND, LOW BALANCE, OR CURRENCY MISMATCH ERRORS
@@ -197,22 +196,23 @@ public class accountOverview extends JPanel {
 					JPanel errorPanel = new JPanel();
 					JLabel errorLabel;
 					if ((account.getBalance() < amount)) {
-						System.out.println("Transfer failed, low balance.");
-						errorLabel = new JLabel("Transfer failed, low balance");
+						JOptionPane.showMessageDialog(null, "Low Balance", "ERROR", JOptionPane.ERROR_MESSAGE);
+
 					}
 					else if (send == null) {
-						errorLabel = new JLabel("Account not found");
+						JOptionPane.showMessageDialog(null, "Account not found", "ERROR", JOptionPane.ERROR_MESSAGE);
+
 					}
 					else {
-						errorLabel = new JLabel("Accounts based in different currencies");
+						JOptionPane.showMessageDialog(null, "Accounts based in different currencies", "ERROR", JOptionPane.ERROR_MESSAGE);
 					}
-					errorPanel.add(errorLabel);
-					error.getContentPane().add(errorPanel);
-					
-					error.setTitle("ERROR");
-					error.setSize( 250, 75 );
-					error.setLocation( 250, 200 );
-					error.setVisible( true );				
+//					errorPanel.add(errorLabel);
+//					error.getContentPane().add(errorPanel);
+//
+//					error.setTitle("ERROR");
+//					error.setSize( 250, 75 );
+//					error.setLocation( 250, 200 );
+//					error.setVisible( true );
 				}
 				else {
 					System.out.println("AccountOverview Transfer else,transfer being called");
@@ -272,16 +272,14 @@ public class accountOverview extends JPanel {
 						if (app) {
 							result.getContentPane().add(new JLabel("Loan Approved"));
 							account.makeTransaction("receipt", amount, "LOAN", Date.getCurrentDate());
+							SqlFunc.updateAccountLoanByAid(Integer.parseInt(account.getID()),amount);
 							client.giveLoan();
 							
 						}
-						else 
-							result.getContentPane().add(new JLabel("Loan Denied"));
-						result.setTitle("Result");
-						result.setSize( 250, 75 );
-						result.setLocation( 250, 200 );
-						result.setVisible( true );	
-						
+						else
+							JOptionPane.showMessageDialog(null, "Loan Denied", "Denied", JOptionPane.ERROR_MESSAGE);
+
+
 						JPanel panelNew = accountOverview.init(frame, client, account);
 						frame.setContentPane(panelNew);
 						frame.revalidate();

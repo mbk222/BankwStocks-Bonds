@@ -1,3 +1,4 @@
+
 public class Transaction {
 	
 	private Date date;
@@ -17,6 +18,15 @@ public class Transaction {
 		this.type = type;
 		newBalance = acc.getBalance();
 		accountID = acc.getID();
+	}
+
+	public Transaction(Date date,double newBalance,String accountID, double amount, String reference, String type) {
+		this.date = date;
+		this.amount = amount;
+		this.reference = reference;
+		this.type = type;
+		this.newBalance = newBalance;
+		this.accountID = accountID;
 	}
 	
 	

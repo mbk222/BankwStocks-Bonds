@@ -6,6 +6,7 @@ public class Client extends Person{
 	private double loan;
 	private boolean haveLoan = false;
 	private boolean collateral;
+	private int id;
 	// add PERSON ID
 
 	
@@ -20,8 +21,21 @@ public class Client extends Person{
 		super(fname, mname, lname, login);
 		Database.addClient(this);
 	}
-	
-	
+
+	public Client(String fname, String mname, String lname, String login, int id) {
+		super(fname, mname, lname, login);
+		this.id = id;
+		Database.addClient(this);
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public void openAccount(Account acc) {
 		accounts.add(acc);
 		

@@ -26,7 +26,7 @@ public class clientCreate extends JPanel {
 	
 	public clientCreate() {
 		testframe.setBounds(100, 100, 480, 330);
-		testframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//testframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		init(testframe);
 	}
 	
@@ -102,10 +102,14 @@ public class clientCreate extends JPanel {
 				String login = loginC.getText();
 				String password = passwordC.getText();
 				
-				
+
 				Client c = new Client(fname,mname,lname,login);
+
 				c.setPassword(password);
-				
+				//SqlFunc.init();
+				SqlFunc.insertCustomer(c.getId(),login,password,fname,mname,lname);
+				//SqlFunc.close();
+				//
 				JPanel panel_New = clientLogin.init(frame);
 				
 				frame.setContentPane(panel_New);
