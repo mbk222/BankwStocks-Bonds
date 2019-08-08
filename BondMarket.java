@@ -52,6 +52,7 @@ public class BondMarket {
 		int i = getIndex(market,bond);
 		if (i >= 0) {
 			market.remove(i);
+			bonds[i] = null; // CREATES INIT PROBLEMS,DATABASE WILL STILL RUN?
 		}
 	}
 

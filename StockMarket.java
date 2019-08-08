@@ -61,6 +61,7 @@ public class StockMarket {
 		int i = getIndex(market,stock);
 		if (i >= 0) {
 			market.remove(i);
+			stocks[i] = null; // CAUSES INIT PROBLEMS, DOES IT RUN WITH DATABASE?
 		}
 		else{
 			System.out.println("Stock not removed");
