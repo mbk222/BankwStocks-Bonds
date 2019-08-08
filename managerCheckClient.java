@@ -72,58 +72,30 @@ public class managerCheckClient extends JPanel {
 				lnameField.setText("");
 				
 				Client found = Database.findClient(firstN, middleN, lastN);
+
+				System.out.println(found);
+
+				JFrame clientInfoFrame = new JFrame();
+				JPanel clientInfoPanel = new JPanel();
+		// 			JLabel errorLabel = new JLabel("Invalid Withdrawal");
+					
+		// 			errorPanel.add(errorLabel);
+		// 			error.getContentPane().add(errorPanel);
 				
 				JLabel checkClient = new JLabel( "<html>" +  manager.checkClient(found) + "</html>");
+				// System.out.println(manager.checkClient(found));
 				JPanel clientPanel = new JPanel();
 				
-				clientPanel.add(checkClient);
-				
-				
-				JButton back = new JButton("Back");
-				
-				class backListener implements ActionListener {
-					public void actionPerformed(ActionEvent e ) {
-						JPanel panel_New = managerDisplay.init(frame, manager);
-						
-						clientPanel.removeAll();
-						
-						frame.setContentPane(panel_New);
-						frame.revalidate();
-						frame.repaint();
-					}
-				}
-				
-				backListener backL = new backListener();
-				back.addActionListener(backL);
-				
-				clientPanel.add(back);
-			
-				panel.removeAll();
-				
-				frame.setContentPane(clientPanel);
-				frame.revalidate();
-				frame.repaint();
+				clientInfoPanel.add(checkClient);
+
+				clientInfoFrame.getContentPane().add(clientInfoPanel);
+				clientInfoFrame.setTitle("Client Info");
+				clientInfoFrame.setSize( 480, 330 );
+				clientInfoFrame.setLocation( 250, 200 );
+				clientInfoFrame.setVisible( true );
 
 			}
 		});
-		
-		
-//		JButton back = new JButton("Back");
-//		
-//		class backListener implements ActionListener {
-//			public void actionPerformed(ActionEvent e ) {
-//				JPanel panel_New = managerDisplay.init(frame, manager);
-//				
-//				frame.setContentPane(panel_New);
-//				frame.revalidate();
-//				frame.repaint();
-//			}
-//		}
-//		
-//		backListener backL = new backListener();
-//		back.addActionListener(backL);
-//	//	clientPanel.add(back);
-//		
 		
 		check.setBounds(156, 208, 117, 29);
 		panel.add(check);
@@ -132,7 +104,12 @@ public class managerCheckClient extends JPanel {
 		class backListener implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 				JPanel panel_New = managerDisplay.init(frame, manager);
+
+				panel.removeAll();
 				
+				frame.setContentPane(panel_New);
+				frame.revalidate();
+				frame.repaint();
 			}
 		}
 		backListener backL = new backListener();

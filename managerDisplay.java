@@ -144,6 +144,27 @@ public class managerDisplay extends JPanel {
 		panel.add(viewDebt);
 		
 		JButton btnRemoveStock = new JButton("Remove Stock");
+		class removeStockListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Remove Stock");
+			//	String name = stockNameTF.getText();
+				String ticker = stockTickerTF.getText();
+			//	double interest = Double.parseDouble(stockPriceTF.getText());
+				
+				System.out.println(StockMarket.getStock(ticker));
+				StockMarket.removeStock(StockMarket.getStock(ticker));
+				
+				panel.removeAll();
+				
+				JPanel panel_New = managerDisplay.init(frame, manager);
+				frame.setContentPane(panel_New);
+				frame.revalidate();
+				frame.repaint();
+			}
+		}
+
+		removeStockListener removeStockL = new removeStockListener();
+		btnRemoveStock.addActionListener(removeStockL);		
 		btnRemoveStock.setBounds(10, 260, 127, 29);
 		panel.add(btnRemoveStock);
 		
@@ -163,6 +184,27 @@ public class managerDisplay extends JPanel {
 		panel.add(stockNameTF);
 		
 		JButton btnAddStock = new JButton("Add Stock");
+		class addStockListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Adding Stock");
+				String name = stockNameTF.getText();
+				String ticker = stockTickerTF.getText();
+				double interest = Double.parseDouble(stockPriceTF.getText());
+				
+				Stock send = new Stock(name, ticker, interest);
+				StockMarket.addStock(send);
+				
+				panel.removeAll();
+				
+				JPanel panel_New = managerDisplay.init(frame, manager);
+				frame.setContentPane(panel_New);
+				frame.revalidate();
+				frame.repaint();
+			}
+		}
+		
+		addStockListener addStockL = new addStockListener();
+		btnAddStock.addActionListener(addStockL);
 		btnAddStock.setBounds(10, 225, 127, 29);
 		panel.add(btnAddStock);
 		
@@ -182,18 +224,53 @@ public class managerDisplay extends JPanel {
 		panel.add(bondLengthTF);
 		
 		JButton addBond = new JButton("Add Bond");
-//		class buyBondListener implements ActionListener {
-//			public void ActionPerformed(ActionEvent e) {
-//				System.out.println("Adding Bond");
-//			}
-//		}
+		class addBondListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Adding Bond");
+				String name = bondNameTF.getText();
+				double interest = Double.parseDouble(bondInterestTF.getText());
+				int length = Integer.parseInt(bondLengthTF.getText());
+
+				BondMarket.addBond(new Bond(name, interest, length));
+				System.out.println(BondMarket.displayMarket());
+
+				panel.removeAll();
+
+				JPanel panelNew = managerDisplay.init(frame, manager);
+				frame.setContentPane(panelNew);
+				frame.revalidate();
+				frame.repaint();
+			}
+		}
 	
+		addBond.addActionListener(new addBondListener());
 		addBond.setBounds(170, 225, 117, 29);
 		panel.add(addBond);
 		
 		JButton btnRemoveBond = new JButton("Remove Bond");
+		class removeBondListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Removing Bond");
+				String name = bondNameTF.getText();
+				//double interest = Double.parseDouble(bondInterestTF.getText());
+				//int length = Integer.parseInt(bondLengthTF.getText());
+
+				BondMarket.removeBond(BondMarket.getBond(name));
+				System.out.println(BondMarket.displayMarket());
+
+				panel.removeAll();
+
+				JPanel panelNew = managerDisplay.init(frame, manager);
+				frame.setContentPane(panelNew);
+				frame.revalidate();
+				frame.repaint();
+			}
+		}
+
+		btnRemoveBond.addActionListener(new removeBondListener());
 		btnRemoveBond.setBounds(170, 260, 117, 29);
 		panel.add(btnRemoveBond);
+
 		
 		JLabel stockName = new JLabel("name");
 		stockName.setHorizontalAlignment(SwingConstants.CENTER);

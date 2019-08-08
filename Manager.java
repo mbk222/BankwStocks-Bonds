@@ -13,8 +13,7 @@ public class Manager extends Person{
 	}
 	
 	// need to know how the Bank works
-	public String checkClient(Client customer) {
-		Client client = Database.getClient(customer);
+	public String checkClient(Client client) {
 		String s = client.viewBalances();
 		
 		if (client.hasLoan()) {
